@@ -109,12 +109,10 @@ nav ul li a:hover::after {
     background-size: cover;
     background-position: center;
     
-    /* --- PARALLAX FIX START --- */
     position: fixed; /* Pins header to the background */
     top: 0;
     left: 0;
     z-index: 1; /* Lower priority: stays behind other content */
-    /* --- PARALLAX FIX END --- */
 }
 
 #header .container {
@@ -154,7 +152,7 @@ nav ul li a:hover::after {
     color: var(--text-secondary);
     
     /* --- PARALLAX FIX START --- */
-    margin-top: 100vh; /* Pushes About section below the fixed header */
+    margin-top: 85vh; /* Pushes About sectio below the fixed header */
     position: relative; /* Brings it back into layout flow */
     z-index: 2; /* Higher priority: Slides OVER the header */
     background: var(--bg-color); /* Solid background so header doesn't show through */
@@ -483,19 +481,15 @@ nav .fa-solid {
         top: 0;
         left: 0;
         
-        /* FIX: Use Viewport Width & Hide Overflow */
         width: 100vw; 
         max-width: 100%;
-        height: 100vh;
+        height: 100vh; 
+        
         overflow: hidden; 
-        
-        /* z-index 1: Sits at the back */
         z-index: 1; 
-        
         background: #ffffff; 
         padding-bottom: 50px;
         
-        /* Flexbox to keep text centered */
         display: flex;
         align-items: center; 
         justify-content: center;
@@ -505,13 +499,13 @@ nav .fa-solid {
     #about, #portfolio, #contact, .copyright {
         position: relative;
         z-index: 100; 
-        background-color: #ffffff !important; /* Force Solid White */
+        background-color: #ffffff !important; 
         width: 100%; 
     }
 
-    /* 3. PARALLAX MARGIN */
+    /* 3. PARALLAX MARGIN (This pushes the About section down) */
     #about {
-        margin-top: 100vh; 
+        margin-top: 85vh;       
         padding-top: 80px;
         border-top: 1px solid #ffffff; 
     }
