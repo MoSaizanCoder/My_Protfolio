@@ -505,7 +505,7 @@ nav .fa-solid {
 
     /* 3. PARALLAX MARGIN (This pushes the About section down) */
     #about {
-        margin-top: 85vh;       
+        margin-top: 80vh;       
         padding-top: 80px;
         border-top: 1px solid #ffffff; 
     }
