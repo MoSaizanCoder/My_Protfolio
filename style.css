@@ -361,18 +361,23 @@ nav ul li a:hover::after {
 }
 
 /* ----------------- Buttons ----------------- */
-
+/* Base Button */
 .btn {
-  display: block;
-  margin: 5px auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5px 0;
   width: fit-content;
   border: 1px solid var(--primary-color);
-  padding: 14px 50px;
+  padding: 14px 40px;
   border-radius: 6px;
   text-decoration: none;
   color: var(--text-main);
-  transition: background 0.5s, color 0.5s, box-shadow 0.3s;
+  background: transparent;
   font-size: 16px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.4s ease, color 0.4s ease, box-shadow 0.3s ease;
 }
 
 .btn:hover {
@@ -381,19 +386,17 @@ nav ul li a:hover::after {
   box-shadow: 0 0 15px rgba(79, 70, 229, 0.4);
 }
 
+/* Secondary Button / Solid Theme */
 .btn.btn2 {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
   background: var(--primary-color);
   color: #fff;
-  border: none;
-  cursor: pointer;
+  border: 1px solid var(--primary-color);
   margin-top: 20px;
 }
 
 .btn.btn2:hover {
   background: var(--accent-color);
+  border-color: var(--accent-color);
   box-shadow: 0 0 15px rgba(79, 70, 229, 0.4);
 }
 
@@ -404,17 +407,20 @@ nav ul li a:hover::after {
   margin-top: 20px;
 }
 
+/* Reset button margins inside the dropdown container */
 .resume-dropdown .btn.btn2 {
-  margin-top: 0;
+  margin: 0;
+  gap: 8px;
 }
 
-/* Arrow transition */
+/* Arrow Caret */
 .dropdown-toggle .arrow {
-  font-size: 0.8em;
+  display: inline-block;
+  font-size: 0.75em;
   transition: transform 0.3s ease;
 }
 
-/* White Dropdown Menu */
+/* Dropdown Menu Container */
 .dropdown-menu {
   display: none;
   position: absolute;
@@ -422,34 +428,38 @@ nav ul li a:hover::after {
   left: 0;
   min-width: 100%;
   width: max-content;
-  background-color: #ffffff; /* Solid white background */
+  max-width: 90vw; /* Prevents overflow on mobile */
+  background-color: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 6px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  padding: 8px 0;
-  z-index: 100;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  padding: 6px 0;
+  z-index: 1000;
+  overflow: hidden;
 }
 
-/* Black text options */
+/* Dropdown Options */
 .dropdown-menu a {
-  color: #111827; /* Dark black/gray text */
-  padding: 12px 24px;
+  color: #111827;
+  padding: 12px 20px;
   text-decoration: none;
   display: block;
   font-size: 14px;
   font-weight: 500;
   text-align: left;
+  line-height: 1.4;
+  white-space: nowrap;
   transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
 }
 
-/* Hover state on menu items */
+/* Option Hover Effect */
 .dropdown-menu a:hover {
   background-color: var(--primary-color);
   color: #ffffff;
-  padding-left: 28px;
+  padding-left: 24px;
 }
 
-/* Active State controlled via Click (JavaScript) */
+/* Active Dropdown State */
 .resume-dropdown.active .dropdown-menu {
   display: block;
 }
