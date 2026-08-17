@@ -1,48 +1,111 @@
-// --- Tab Navigation Logic ---
-var tablinks = document.getElementsByClassName("tab-links");
-var tabcontents = document.getElementsByClassName("tab-contents");
+document.addEventListener("DOMContentLoaded", () => {
+  // --- Tab Navigation Logic ---
+  const tablinks = document.querySelectorAll(".tab-links");
+  const tabcontents = document.querySelectorAll(".tab-contents");
 
-function opentab(tabname) {
-    // defined 'tablink' and 'tabcontent' with let to avoid global scope pollution
-    for (let tablink of tablinks) {
-        tablink.classList.remove("active-link");
-    }
-    for (let tabcontent of tabcontents) {
-        tabcontent.classList.remove("active-tab");
+  window.opentab = function (tabname, event) {
+    tablinks.forEach(tablink => tablink.classList.remove("active-link"));
+    tabcontents.forEach(tabcontent => tabcontent.classList.remove("active-tab"));
+
+    if (event && event.currentTarget) {
+      event.currentTarget.classList.add("active-link");
     }
     
-    // Note: This relies on the global 'event' object. 
-    event.currentTarget.classList.add("active-link");
-    document.getElementById(tabname).classList.add("active-tab");
-}
+    const targetTab = document.getElementById(tabname);
+    if (targetTab) {
+      targetTab.classList.add("active-tab");
+    }
+  };
 
-// --- Side Menu Logic ---
-var sidemenu = document.getElementById("sidemenu");
+  // --- Side Menu Logic ---
+  const sidemenu = document.getElementById("sidemenu");
 
-function openmenu() {
-    sidemenu.style.right = "0";
-}
+  window.openmenu = function () {
+    if (sidemenu) sidemenu.style.right = "0";
+  };
 
-function closemenu() {
-    sidemenu.style.right = "-200px";
-}
+  window.closemenu = function () {
+    if (sidemenu) sidemenu.style.right = "-200px";
+  };
 
-// --- Google Sheets Form Submission ---
-const scriptURL = 'https://script.google.com/macros/s/AKfycby2YNw6KEAS5P_SVnOGablebLk66v8gKYntdHuDx2IiUv0NO9Lg8z0GF7Im6YkATdyp/exec';
-const form = document.forms['submit-to-google-sheet'];
-const msg = document.getElementById("msg");
+  // --- Resume Dropdown Click Logic ---
+  const resumeDropdown = document.getElementById("resumeDropdown");
+  const dropdownToggle = document.getElementById("dropdownToggle");
 
-if (form) {
-    form.addEventListener('submit', e => {
-        e.preventDefault();
-        fetch(scriptURL, { method: 'POST', body: new FormData(form) })
-            .then(response => {
-                msg.innerHTML = "Thank you for your message. We will get back to you soon.";
-                setTimeout(function () {
-                    msg.innerHTML = "";
-                }, 5000);
-                form.reset(); // Fixed typo: changed .result() to .reset()
-            })
-            .catch(error => console.error('Error!', error.message));
+  if (resumeDropdown && dropdownToggle) {
+    // Toggle dropdown open/close
+    dropdownToggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      resumeDropdown.classList.toggle("active");
+      const isExpanded = resumeDropdown.classList.contains("active");
+      dropdownToggle.setAttribute("aria-expanded", isExpanded);
     });
-}
+
+    // Close when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!resumeDropdown.contains(e.target)) {
+        resumeDropdown.classList.remove("active");
+        dropdownToggle.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    // Close when an option is selected
+    resumeDropdown.querySelectorAll(".dropdown-menu a").forEach((link) => {
+      link.addEventListener("click", () => {
+        resumeDropdown.classList.remove("active");
+        dropdownToggle.setAttribute("aria-expanded", "false");
+      });
+    });
+  }
+
+  // --- Google Sheets Contact Form Submission ---
+  const scriptURL = 'https://script.google.com/macros/s/AKfycby2YNw6KEAS5P_SVnOGablebLk66v8gKYntdHuDx2IiUv0NO9Lg8z0GF7Im6YkATdyp/exec';
+  const form = document.forms['submit-to-google-sheet'];
+  const msg = document.getElementById("msg");
+
+  if (form) {
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      // Prevent duplicate submissions and provide feedback
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Sending...";
+      }
+
+      try {
+        const response = await fetch(scriptURL, {
+          method: "POST",
+          body: new FormData(form),
+        });
+
+        if (response.ok) {
+          if (msg) {
+            msg.textContent = "Thank you for your message. I will get back to you soon.";
+            setTimeout(() => {
+              msg.textContent = "";
+            }, 5000);
+          }
+          form.reset();
+        } else {
+          throw new Error("Form submission returned an error status.");
+        }
+      } catch (error) {
+        console.error("Submission Error:", error.message);
+        if (msg) {
+          msg.textContent = "Something went wrong. Please try again later.";
+          setTimeout(() => {
+            msg.textContent = "";
+          }, 5000);
+        }
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerText = "Submit";
+        }
+      }
+    });
+  }
+});
